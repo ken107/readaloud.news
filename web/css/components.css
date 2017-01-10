@@ -1,0 +1,64 @@
+.progress-ind {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: black;
+  opacity: .5;
+}
+.progress-ind > div {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+.progress-ind img {
+  position: relative;
+  top: -64px;
+  left: -64px;
+}
+
+.item {
+  background: #ddd;
+  border: 3px outset;
+  padding: 0;
+}
+.item:active {
+  border: 2px inset;
+}
+.item .number {
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  font-size: 32px;
+  vertical-align: middle;
+  float: left;
+  background: #ccc;
+}
+.item .text {
+  margin: 5px 5px 5px 55px;
+}
+
+.header .col-1 {
+  padding: 0;
+}
+.header .col-2 {
+  text-align: center;
+}
+.header .col-3 {
+  padding: 0;
+  text-align: right;
+}
+
+.footer {
+  clear: both;
+  padding: 10px;
+  text-align: center;
+}
+
+.reading-page .title {
+  clear: both;
+  padding: 10px;
+  text-align: center;
+  font-size: large;
+}

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/components.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <script src="https://rawgit.com/ken107/databind-js/master/databind.js"></script>
+  <script src="https://rawgit.com/mtrpcic/pathjs/master/path.js"></script>
+  <script src="https://www.promisejs.org/polyfills/promise-7.0.4.min.js"></script>
+  <script src="http://code.responsivevoice.org/responsivevoice.js"></script>
+  <script src="js/components.js"></script>
+
+  <script>
+    $("<div/>").load("components.html", function() {
+      $(this).children("[data-class]").each(function() {
+        var className = $(this).data("class");
+        if (!window[className]) throw new Error("Missing class " + className);
+        dataBinder.views[className] = {template: this, controller: window[className]};
+      })
+    });
+  </script>
+
+  <script>
+    state = {};
+    voiceEngine = null;
+
+    responsiveVoice.AddEventListener("OnReady", function() {
+      voiceEngine = responsiveVoice;
+    });
+
+    $(function() {
+      Path.root("#/sources");
+      Path.map("#/:page(/:source)(/:topic)(/:article)")
+        .enter(function() {
+          if (voiceEngine) voiceEngine.cancel();
+        })
+        .to(function() {
+          state.page = this.params.page;
+          state.source = this.params.source;
+          state.topic = this.params.topic;
+          state.article = this.params.article;
+        });
+      Path.listen();
+    })
+  </script>
+</head>
+<body>
+  <div bind-view="SourcesPage"
+    bind-param-voice-engine="#voiceEngine"
+    bind-param-active="#state.page == 'sources'"></div>
+  <div bind-view="TopicsPage"
+    bind-param-voice-engine="#voiceEngine"
+    bind-param-source-index="#state.source"
+    bind-param-active="#state.page == 'topics'"></div>
+  <div bind-view="ArticlesPage"
+    bind-param-voice-engine="#voiceEngine"
+    bind-param-source-index="#state.source"
+    bind-param-topic-index="#state.topic"
+    bind-param-active="#state.page == 'articles'"></div>
+  <div bind-view="ReadingPage"
+    bind-param-voice-engine="#voiceEngine"
+    bind-param-source-index="#state.source"
+    bind-param-topic-index="#state.topic"
+    bind-param-article-index="#state.article"
+    bind-param-active="#state.page == 'reading'"></div>
+</body>
+</html>
