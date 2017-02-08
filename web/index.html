@@ -13,8 +13,8 @@
   <script src="https://rawgit.com/ken107/databind-js/master/databind.js"></script>
   <script src="https://rawgit.com/mtrpcic/pathjs/master/path.js"></script>
   <script src="https://www.promisejs.org/polyfills/promise-7.0.4.min.js"></script>
-  <script src="http://code.responsivevoice.org/responsivevoice.js"></script>
   <script src="js/components.js"></script>
+  <script src="js/speech.js"></script>
 
   <script>
     $("<div/>").load("components.html", function() {
@@ -23,15 +23,6 @@
         if (!window[className]) throw new Error("Missing class " + className);
         dataBinder.views[className] = {template: this, controller: window[className]};
       })
-    });
-  </script>
-
-  <script>
-    state = {};
-    voiceEngine = null;
-
-    responsiveVoice.AddEventListener("OnReady", function() {
-      voiceEngine = responsiveVoice;
     });
 
     $(function() {
@@ -48,6 +39,23 @@
         });
       Path.listen();
     })
+  </script>
+
+  <script>
+    state = {
+      page: "sources"
+    };
+    voiceEngine = {
+      speak: function(texts) {
+        if (typeof texts == "string") texts = [texts];
+        if (this.speech) this.speech.pause();
+        this.speech = new Speech(texts, {hack: true, spchletMaxLen: 36});
+        this.speech.play();
+      },
+      cancel: function() {
+        if (this.speech) this.speech.pause();
+      }
+    };
   </script>
 </head>
 <body>

@@ -10,7 +10,7 @@
     <button bind-event-click="history.back()">Back</button>
   </div>
   <div class="col-xs-4 col-2">
-    Tin10h
+    ReadAloud.News
   </div>
   <div class="col-xs-4 col-3">
     <button>Pause</button>
@@ -18,7 +18,6 @@
 </div>
 
 <div data-class="Footer" class="footer">
-  <a href="http://responsivevoice.org">ResponsiveVoice-NonCommercial</a> licensed under <a href="http://creativecommons.org/licenses/by-nc-nd/4.0/"><img title="ResponsiveVoice Text To Speech" src="https://responsivevoice.org/wp-content/uploads/2014/08/95x15.png" alt="95x15" width="95" height="15" style="vertical-align: middle;" /></a>
 </div>
 
 <div data-class="ItemList" class="item-list"
@@ -47,7 +46,7 @@
 
 <div data-class="TopicsPage" class="topics-page"
   bind-var-topics="null"
-  bind-statement-1="if (#sourceIndex!=null) { #topics=null; this.loadSource(#sourceIndex).then(function(topics) {#topics=topics}) }"
+  bind-statement-1="if (#sourceIndex==null) #topics=null; else this.loadSource(#sourceIndex).then(function(topics) {#topics=topics})"
   bind-statement-2="if (#active && #voiceEngine) this.speak(#voiceEngine, #topics)"
   bind-statement-3="$(thisElem).toggle(#active)">
   <div bind-view="Header"></div>
@@ -61,7 +60,7 @@
 
 <div data-class="ArticlesPage" class="articles-page"
   bind-var-topic="null"
-  bind-statement-1="if (#sourceIndex!=null && #topicIndex!=null) { #topic=null; this.loadTopic(#sourceIndex, #topicIndex).then(function(topic) {#topic=topic}) }"
+  bind-statement-1="if (#sourceIndex==null || #topicIndex==null) #topic=null; else this.loadTopic(#sourceIndex, #topicIndex).then(function(topic) {#topic=topic})"
   bind-statement-2="if (#active && #voiceEngine) this.speak(#voiceEngine, #topic)"
   bind-statement-3="$(thisElem).toggle(#active)">
   <div bind-view="Header"></div>
@@ -75,12 +74,12 @@
 
 <div data-class="ReadingPage" class="reading-page"
   bind-var-article="null"
-  bind-statement-1="if (#sourceIndex!=null && #topicIndex!=null && #articleIndex!=null) { #article=null; this.loadArticle(#sourceIndex, #topicIndex, #articleIndex).then(function(article) {#article=article}) }"
+  bind-statement-1="if (#sourceIndex==null || #topicIndex==null || #articleIndex==null) #article=null; else this.loadArticle(#sourceIndex, #topicIndex, #articleIndex).then(function(article) {#article=article})"
   bind-statement-2="if (#active && #voiceEngine) this.speak(#voiceEngine, #article)"
   bind-statement-3="$(thisElem).toggle(#active)">
   <div bind-view="Header"></div>
   <div bind-view="ItemList"
-    bind-param-items="['Đọc bản tin kế tiếp', 'Xem bài gốc']"
+    bind-param-items="['Next article', 'View original article']"
     bind-event-select="this.onSelect(event.data, #article)"></div>
   <div class="title">{{#article.title}}</div>
   <div bind-view="Footer"></div>

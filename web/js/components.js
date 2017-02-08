@@ -2,7 +2,7 @@
 var wsUrl = "http://app.diepkhuc.com:30112";
 
 function addNumbering(item, index) {
-  return (index +1) + ". " + item;
+  return (index +1) + ": " + item;
 }
 
 function addPeriod(item) {
@@ -27,18 +27,15 @@ function  SourcesPage() {
   this.loadSources = function() {
     return new Promise(function(fulfill) {
       $.get(wsUrl + "/news-scraper", function(result) {
-        fulfill(result.filter(function(source) {return source.lang == "vi"}).map(function(source) {return source.name}))
+        fulfill(result.filter(function(source) {return source.lang == "en"}).map(function(source) {return source.name}))
       });
     })
   }
   this.speak = function(voiceEngine, sources) {
     if (sources) {
-      var speech = 'Mến chào bạn đến với tin 10h.\n\nXin chọn một trong các nguồn tin sau đây:\n' + sources.map(addNumbering).map(addPeriod).join('\n');
+      var speech = 'Welcome to Read Aloud News.\n\nPlease select a news source.\n' + sources.map(addNumbering).map(addPeriod).join("\n");
       console.log(speech);
       voiceEngine.speak(speech, 'Vietnamese Male')
-    }
-    else {
-      voiceEngine.cancel();
     }
   }
 }
@@ -53,12 +50,9 @@ function TopicsPage() {
   }
   this.speak = function(voiceEngine, topics) {
     if (topics) {
-      var speech = 'Xin chọn một trong các chủ đề sau đây:\n' + topics.map(addNumbering).map(addPeriod).join('\n');
+      var speech = 'Select a topic.\n' + topics.map(addNumbering).map(addPeriod).join("\n");
       console.log(speech);
       voiceEngine.speak(speech, 'Vietnamese Male')
-    }
-    else {
-      voiceEngine.cancel();
     }
   }
 }
@@ -76,12 +70,9 @@ function ArticlesPage() {
   }
   this.speak = function(voiceEngine, topic) {
     if (topic) {
-      var speech = 'Chủ đề ' + topic.name + ':\n' + topic.articles.map(addNumbering).map(addPeriod).join('\n');
+      var speech = ['Topic ' + topic.name + '.'].concat(topic.articles.map(addNumbering).map(addPeriod));
       console.log(speech);
       voiceEngine.speak(speech, 'Vietnamese Male')
-    }
-    else {
-      voiceEngine.cancel();
     }
   }
 }
@@ -94,12 +85,9 @@ function ReadingPage() {
   }
   this.speak = function(voiceEngine, article) {
     if (article) {
-      var speech = addPeriod(article.title) + '\n\n' + article.texts.map(addPeriod).join('\n\n');
+      var speech = [article.title].concat(article.texts);
       console.log(speech);
       voiceEngine.speak(speech, 'Vietnamese Male')
-    }
-    else {
-      voiceEngine.cancel();
     }
   }
   this.onSelect = function(index, article) {
