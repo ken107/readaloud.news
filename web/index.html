@@ -37,9 +37,9 @@
     $(function() {
       Path.root("#/sources");
       Path.map("#/:page(/:source)(/:topic)(/:article)")
-        .enter(function() {
-          if (voiceEngine) voiceEngine.cancel();
-        })
+        //.enter(function() {
+        //  if (voiceEngine) voiceEngine.pause();
+        //})
         .to(function() {
           state.page = this.params.page;
           state.source = this.params.source;
@@ -51,9 +51,7 @@
   </script>
 
   <script>
-    state = {
-      page: "sources"
-    };
+    state = {};
     voiceEngine = {
       speak: function(texts) {
         if (typeof texts == "string") texts = [texts];
@@ -61,8 +59,11 @@
         this.speech = new Speech(texts, {hack: true, spchletMaxLen: 36});
         this.speech.play();
       },
-      cancel: function() {
+      pause: function() {
         if (this.speech) this.speech.pause();
+      },
+      resume: function() {
+        if (this.speech) this.speech.play();
       }
     };
   </script>
@@ -70,21 +71,28 @@
 <body>
   <div bind-view="SourcesPage"
     bind-param-voice-engine="#voiceEngine"
-    bind-param-active="#state.page == 'sources'"></div>
+    bind-param-active="#state.page == 'sources'"
+    bind-event-select-source="location.href = '#/topics/' + event.data"></div>
   <div bind-view="TopicsPage"
     bind-param-voice-engine="#voiceEngine"
     bind-param-source-index="#state.source"
-    bind-param-active="#state.page == 'topics'"></div>
+    bind-param-active="#state.page == 'topics'"
+    bind-event-select-topic="location.href = '#/articles/' + #state.source + '/' + event.data"
+    bind-event-go-back="location.href = '#/sources'"></div>
   <div bind-view="ArticlesPage"
     bind-param-voice-engine="#voiceEngine"
     bind-param-source-index="#state.source"
     bind-param-topic-index="#state.topic"
-    bind-param-active="#state.page == 'articles'"></div>
+    bind-param-active="#state.page == 'articles'"
+    bind-event-select-article="location.href = '#/reading/' + #state.source + '/' + #state.topic + '/' + event.data"
+    bind-event-go-back="location.href = '#/topics/' + #state.source"></div>
   <div bind-view="ReadingPage"
     bind-param-voice-engine="#voiceEngine"
     bind-param-source-index="#state.source"
     bind-param-topic-index="#state.topic"
     bind-param-article-index="#state.article"
-    bind-param-active="#state.page == 'reading'"></div>
+    bind-param-active="#state.page == 'reading'"
+    bind-event-next-article="location.href = '#/reading/' + #state.source + '/' + #state.topic + '/' + (Number(#state.article) +1)"
+    bind-event-go-back="location.href = '#/articles/' + #state.source + '/' + #state.topic"></div>
 </body>
 </html>

@@ -63,7 +63,10 @@ function ArticlesPage() {
       $.get(wsUrl + "/news-scraper/" + sourceIndex + "/" + topicIndex, function(result) {
         fulfill({
           name: result.name,
-          articles: result.articles.map(function(article) {return article.title})
+          articles: result.articles.map(function(article) {
+            if (article.source) return article.source + " - " + article.title;
+            else return article.title;
+          })
         })
       });
     })
@@ -77,7 +80,7 @@ function ArticlesPage() {
   }
 }
 
-function ReadingPage() {
+function ReadingPage(viewRoot) {
   this.loadArticle = function(sourceIndex, topicIndex, articleIndex) {
     return new Promise(function(fulfill) {
       $.get(wsUrl + "/news-scraper/" + sourceIndex + "/" + topicIndex + "/" + articleIndex, fulfill);
@@ -93,7 +96,7 @@ function ReadingPage() {
   this.onSelect = function(index, article) {
     switch (index) {
       case 0:
-        location.href = '#/reading/' + this.sourceIndex + '/' + this.topicIndex + '/' + (Number(this.articleIndex) +1);
+        $(viewRoot).triggerHandler('next-article');
         break;
       case 1:
         window.open(article.link, "_blank");

@@ -1,33 +1,36 @@
 
 function Speech(texts, options) {
+  var self = this;
   var index = 0;
   var speechlet;
   if (options.hack) texts = textBreaker.breakTexts(texts, options.spchletMaxLen);
 
-  this.options = options;
   this.play = play;
   this.pause = pause;
+  this.isActive = false;
 
   function play() {
-    if (index >= texts.length) {
-      if (options.onEnd) options.onEnd();
-      return Promise.resolve();
-    }
-    return Promise.resolve()
+    return pause()
       .then(function() {
-        if (speechlet) speechlet.stop();
-      })
-      .then(function() {
-        speechlet = new Speechlet(texts[index], function() {index++; play()}, options.hack ? 16*1000 : 0);
-        return speechlet.speak();
+        if (index < texts.length) {
+          speechlet = new Speechlet(texts[index], function() {index++; play()}, options.hack ? 16*1000 : 0);
+          self.isActive = true;
+          return speechlet.speak();
+        }
+        else {
+          if (options.onEnd) options.onEnd();
+        }
       })
   }
 
   function pause() {
-    if (!speechlet) return Promise.resolve();
-    var promise = speechlet.stop();
-    speechlet = null;
-    return promise;
+    if (speechlet) {
+      var promise = speechlet.stop();
+      speechlet = null;
+      self.isActive = false;
+      return promise;
+    }
+    else return Promise.resolve();
   }
 }
 

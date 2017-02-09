@@ -39,11 +39,23 @@
   margin: 5px 5px 5px 55px;
 }
 
+.header {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 100;
+  padding: 3px;
+  background-image: linear-gradient(#ddd, #fff, #ddd);
+}
 .header .col-1 {
   padding: 0;
 }
 .header .col-2 {
   text-align: center;
+  line-height: 34px;
+  font-size: small;
+  font-weight: bold;
+  text-shadow: 1px 1px 0 white;
 }
 .header .col-3 {
   padding: 0;
@@ -52,8 +64,8 @@
 
 .footer {
   clear: both;
-  padding: 10px;
   text-align: center;
+  height: 40px;
 }
 
 .reading-page .title {
