@@ -48,6 +48,10 @@
         });
       Path.listen();
     })
+
+    function safariHack() {
+      speechSynthesis.speak(new SpeechSynthesisUtterance(" "));
+    }
   </script>
 
   <script>
@@ -72,7 +76,7 @@
   <div bind-view="SourcesPage"
     bind-param-voice-engine="#voiceEngine"
     bind-param-active="#state.page == 'sources'"
-    bind-event-select-source="location.href = '#/topics/' + event.data"></div>
+    bind-event-select-source="safariHack(); location.href = '#/topics/' + event.data"></div>
   <div bind-view="TopicsPage"
     bind-param-voice-engine="#voiceEngine"
     bind-param-source-index="#state.source"
