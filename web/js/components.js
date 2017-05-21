@@ -1,5 +1,5 @@
 
-var wsUrl = "http://app.diepkhuc.com:30112";
+var wsUrl = "https://support.lsdsoftware.com:30112";
 
 function addNumbering(item, index) {
   return (index +1) + ": " + item;
@@ -25,17 +25,18 @@ function ItemList() {
 
 function  SourcesPage() {
   this.loadSources = function() {
+    var lang = this.lang;
     return new Promise(function(fulfill) {
       $.get(wsUrl + "/news-scraper", function(result) {
-        fulfill(result.filter(function(source) {return source.lang == "en"}).map(function(source) {return source.name}))
+        fulfill(result.filter(function(source) {return source.lang == lang}).map(function(source) {return source.name}))
       });
     })
   }
   this.speak = function(voiceEngine, sources) {
     if (sources) {
-      var speech = 'Welcome to Read Aloud News.\n\nPlease select a news source.\n' + sources.map(addNumbering).map(addPeriod).join("\n");
+      var speech = sources.map(addNumbering).map(addPeriod).join("\n");
       console.log(speech);
-      voiceEngine.speak(speech, 'Vietnamese Male')
+      //voiceEngine.speak(speech)
     }
   }
 }
@@ -50,9 +51,9 @@ function TopicsPage() {
   }
   this.speak = function(voiceEngine, topics) {
     if (topics) {
-      var speech = 'Select a topic.\n' + topics.map(addNumbering).map(addPeriod).join("\n");
+      var speech = topics.map(addNumbering).map(addPeriod).join("\n");
       console.log(speech);
-      voiceEngine.speak(speech, 'Vietnamese Male')
+      //voiceEngine.speak(speech)
     }
   }
 }
@@ -73,9 +74,9 @@ function ArticlesPage() {
   }
   this.speak = function(voiceEngine, topic) {
     if (topic) {
-      var speech = ['Topic ' + topic.name + '.'].concat(topic.articles.map(addNumbering).map(addPeriod));
+      var speech = [topic.name + '.'].concat(topic.articles.map(addNumbering).map(addPeriod));
       console.log(speech);
-      voiceEngine.speak(speech, 'Vietnamese Male')
+      voiceEngine.speak(speech)
     }
   }
 }
@@ -90,7 +91,7 @@ function ReadingPage(viewRoot) {
     if (article) {
       var speech = [article.title].concat(article.texts);
       console.log(speech);
-      voiceEngine.speak(speech, 'Vietnamese Male')
+      voiceEngine.speak(speech)
     }
   }
   this.onSelect = function(index, article) {

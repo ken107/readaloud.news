@@ -22,8 +22,8 @@
   <script src="https://rawgit.com/ken107/databind-js/master/databind.js"></script>
   <script src="https://rawgit.com/mtrpcic/pathjs/master/path.js"></script>
   <script src="https://www.promisejs.org/polyfills/promise-7.0.4.min.js"></script>
+  <script src="https://ken107.github.io/read-aloud/js/readaloud.min.js"></script>
   <script src="js/components.js"></script>
-  <script src="js/speech.js"></script>
 
   <script>
     $("<div/>").load("components.html", function() {
@@ -50,24 +50,32 @@
     })
 
     function safariHack() {
-      speechSynthesis.speak(new SpeechSynthesisUtterance(" "));
+      if (speechSynthesis) speechSynthesis.speak(new SpeechSynthesisUtterance(" "));
     }
   </script>
 
   <script>
-    state = {};
+    state = {
+      lang: /(tin10h|nghedoctin|nghedoctintuc)\.com$/.test(location.hostname) ? "vi" : "en"
+    };
     voiceEngine = {
       speak: function(texts) {
-        if (typeof texts == "string") texts = [texts];
-        if (this.speech) this.speech.pause();
-        this.speech = new Speech(texts, {hack: true, spchletMaxLen: 36});
-        this.speech.play();
+        readAloud.speak(texts, {lang: state.lang}).then(function() {
+          voiceEngine.speech.isActive = true;
+        });
       },
       pause: function() {
-        if (this.speech) this.speech.pause();
+        readAloud.pause().then(function() {
+          voiceEngine.speech.isActive = false;
+        });
       },
       resume: function() {
-        if (this.speech) this.speech.play();
+        readAloud.play().then(function() {
+          voiceEngine.speech.isActive = true;
+        })
+      },
+      speech: {
+        isActive: false
       }
     };
   </script>
@@ -76,6 +84,7 @@
   <div bind-view="SourcesPage"
     bind-param-voice-engine="#voiceEngine"
     bind-param-active="#state.page == 'sources'"
+    bind-param-lang="#state.lang"
     bind-event-select-source="safariHack(); location.href = '#/topics/' + event.data"></div>
   <div bind-view="TopicsPage"
     bind-param-voice-engine="#voiceEngine"
