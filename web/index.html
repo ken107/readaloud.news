@@ -19,9 +19,8 @@
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-  <script src="https://rawgit.com/ken107/databind-js/master/databind.js"></script>
-  <script src="https://rawgit.com/mtrpcic/pathjs/master/path.js"></script>
-  <script src="https://www.promisejs.org/polyfills/promise-7.0.4.min.js"></script>
+  <script src="https://cdn.rawgit.com/ken107/databind-js/master/databind.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/es6-promise/4.1.0/es6-promise.auto.min.js"></script>
   <script src="https://ken107.github.io/read-aloud/js/readaloud.min.js"></script>
   <script src="js/components.js"></script>
 
@@ -34,29 +33,15 @@
       })
     });
 
-    $(function() {
-      Path.root("#/sources");
-      Path.map("#/:page(/:source)(/:topic)(/:article)")
-        //.enter(function() {
-        //  if (voiceEngine) voiceEngine.pause();
-        //})
-        .to(function() {
-          state.page = this.params.page;
-          state.source = this.params.source;
-          state.topic = this.params.topic;
-          state.article = this.params.article;
-        });
-      Path.listen();
-    })
-
-    function safariHack() {
-      if (speechSynthesis) speechSynthesis.speak(new SpeechSynthesisUtterance(" "));
+    function mobileHack() {
+      readAloud.speak([" "], {lang: state.lang});
     }
   </script>
 
   <script>
     state = {
-      lang: /(tin10h|nghedoctin|nghedoctintuc)\.com$/.test(location.hostname) ? "vi" : "en"
+      page: 'sources',
+      lang: /tin10h\.com$/.test(location.hostname) ? "vi" : "en"
     };
     voiceEngine = {
       speak: function(texts) {
@@ -85,27 +70,27 @@
     bind-param-voice-engine="#voiceEngine"
     bind-param-active="#state.page == 'sources'"
     bind-param-lang="#state.lang"
-    bind-event-select-source="safariHack(); location.href = '#/topics/' + event.data"></div>
+    bind-event-select-source="mobileHack(); state.page='topics'; state.source=event.data"></div>
   <div bind-view="TopicsPage"
     bind-param-voice-engine="#voiceEngine"
     bind-param-source-index="#state.source"
     bind-param-active="#state.page == 'topics'"
-    bind-event-select-topic="location.href = '#/articles/' + #state.source + '/' + event.data"
-    bind-event-go-back="location.href = '#/sources'"></div>
+    bind-event-select-topic="state.page='articles'; state.topic=event.data"
+    bind-event-go-back="state.page='sources'"></div>
   <div bind-view="ArticlesPage"
     bind-param-voice-engine="#voiceEngine"
     bind-param-source-index="#state.source"
     bind-param-topic-index="#state.topic"
     bind-param-active="#state.page == 'articles'"
-    bind-event-select-article="location.href = '#/reading/' + #state.source + '/' + #state.topic + '/' + event.data"
-    bind-event-go-back="location.href = '#/topics/' + #state.source"></div>
+    bind-event-select-article="state.page='reading'; state.article=event.data"
+    bind-event-go-back="state.page='topics'"></div>
   <div bind-view="ReadingPage"
     bind-param-voice-engine="#voiceEngine"
     bind-param-source-index="#state.source"
     bind-param-topic-index="#state.topic"
     bind-param-article-index="#state.article"
     bind-param-active="#state.page == 'reading'"
-    bind-event-next-article="location.href = '#/reading/' + #state.source + '/' + #state.topic + '/' + (Number(#state.article) +1)"
-    bind-event-go-back="location.href = '#/articles/' + #state.source + '/' + #state.topic"></div>
+    bind-event-next-article="state.page='reading'; state.article=Number(#state.article)+1"
+    bind-event-go-back="state.page='articles'"></div>
 </body>
 </html>
