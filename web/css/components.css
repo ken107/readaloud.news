@@ -1,3 +1,4 @@
+
 .progress-ind {
   position: fixed;
   top: 0;
@@ -19,24 +20,24 @@
 }
 
 .item {
-  background: #ddd;
-  border: 3px outset;
+  margin: 2px;
+  background: #fbe1b0;
+  border-radius: 10px 0 0 10px;
   padding: 0;
 }
 .item:active {
-  border: 2px inset;
 }
 .item .number {
   width: 50px;
-  height: 50px;
   text-align: center;
   font-size: 32px;
-  vertical-align: middle;
-  float: left;
-  background: #ccc;
+  background: #7b3d00;
+  color: white;
+  border-radius: 10px 0 0 10px;
 }
 .item .text {
-  margin: 5px 5px 5px 55px;
+  padding: 5px;
+  color: #333;
 }
 
 .header {
@@ -44,22 +45,21 @@
   bottom: 0;
   width: 100%;
   z-index: 100;
-  padding: 3px;
-  background-image: linear-gradient(#ddd, #fff, #ddd);
+  border-collapse: separate;
+  border-spacing: 5px;
+  background-color: white;
 }
 .header .col-1 {
-  padding: 0;
+  width: 1%;
 }
 .header .col-2 {
   text-align: center;
-  line-height: 34px;
   font-size: small;
-  font-weight: bold;
-  text-shadow: 1px 1px 0 white;
+  background-color: #333;
+  color: aliceblue;
 }
 .header .col-3 {
-  padding: 0;
-  text-align: right;
+  width: 1%;
 }
 
 .footer {
@@ -68,9 +68,21 @@
   height: 40px;
 }
 
-.reading-page .title {
+.article {
+  margin: 5px;
+}
+.article .title {
   clear: both;
   padding: 10px;
   text-align: center;
   font-size: large;
+  background-color: #6d8546;
+  color: white;
+  border-radius: 10px 10px 0 0;
+}
+.article .content {
+  padding: 10px;
+  background-color: #c8c9b2;
+  color: #333;
+  border-radius: 0 0 10px 10px;
 }

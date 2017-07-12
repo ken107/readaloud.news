@@ -5,38 +5,44 @@
   </div>
 </div>
 
-<div data-class="Header" class="header"
+<table data-class="Header" class="header"
   bind-var-view-root="thisElem">
-  <div class="col-xs-4 col-1">
+  <tr>
+  <td class="col-1">
     <button type="button" class="btn btn-primary"
       bind-event-click="$(#viewRoot).triggerHandler('button1')">
       <span class="glyphicon glyphicon-arrow-left"></span>
       Back
     </button>
-  </div>
-  <div class="col-xs-4 col-2">
-    ReadAloud.News
-  </div>
-  <div class="col-xs-4 col-3">
+  </td>
+  <td class="col-2">
+    <span bind-event-click="window.open('https://www.lsdsoftware.com/', '_blank')">{{location.hostname.split(".").slice(-2).join(".")}}</span>
+  </td>
+  <td class="col-3">
     <button type="button" class="btn btn-primary"
       bind-event-click="$(#viewRoot).triggerHandler('button2')">
       <span class="glyphicon"
         bind-statement-1="$(thisElem).toggleClass('glyphicon-pause', #isPlaying).toggleClass('glyphicon-play', !#isPlaying)"></span>
       <span bind-statement-1="$(thisElem).text(#isPlaying ? 'Pause' : 'Play')"></span>
     </button>
-  </div>
-</div>
+  </td>
+  </tr>
+</table>
 
 <div data-class="Footer" class="footer">
 </div>
 
 <div data-class="ItemList" class="item-list"
   bind-var-view-root="thisElem">
-  <div class="item col-xs-12 col-sm-6 col-md-4"
+  <div class="item"
     bind-repeater-i="#items.length"
     bind-event-click="$(#viewRoot).triggerHandler('select', #i)">
-    <div class="number">{{#i+1}}</div>
-    <div class="text">{{#items[#i]}}</div>
+    <table>
+      <tr>
+        <td class="number">{{#i+1}}</td>
+        <td class="text">{{#items[#i]}}</td>
+      </tr>
+    </table>
   </div>
 </div>
 
@@ -108,7 +114,12 @@
   <div bind-view="ItemList"
     bind-param-items="['Next article', 'View original article']"
     bind-event-select="this.onSelect(event.data, #article)"></div>
-  <div class="title">{{#article.title}}</div>
+  <div class="article" bind-statement-1="$(thisElem).toggle(!!#article)">
+    <div class="title">{{#article.title}}</div>
+    <div class="content">
+      <p bind-repeater-i="#article.texts.length">{{#article.texts[#i]}}</p>
+    </div>
+  </div>
   <div bind-view="Footer"></div>
   <div bind-view="ProgressInd"
     bind-statement-1="$(thisElem).toggle(#article==null)"></div>
