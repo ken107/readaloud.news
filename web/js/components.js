@@ -1,6 +1,14 @@
 
 var wsUrl = "https://support.lsdsoftware.com:30112";
 
+$("<div/>").load("components.html", function() {
+  $(this).children("[data-class]").each(function() {
+    var className = $(this).data("class");
+    if (!window[className]) throw new Error("Missing class " + className);
+    dataBinder.views[className] = {template: this, controller: window[className]};
+  })
+});
+
 function addNumbering(item, index) {
   return (index +1) + ": " + item;
 }
@@ -43,6 +51,7 @@ function  SourcesPage() {
 }
 
 function TopicsPage() {
+  this.sources = {};
   this.loadSource = function(sourceIndex) {
     return new Promise(function(fulfill) {
       $.get(wsUrl + "/news-scraper/" + sourceIndex, function(result) {
@@ -63,6 +72,7 @@ function TopicsPage() {
 }
 
 function ArticlesPage() {
+  this.topics = {};
   this.loadTopic = function(sourceIndex, topicIndex) {
     return new Promise(function(fulfill) {
       $.get(wsUrl + "/news-scraper/" + sourceIndex + "/" + topicIndex, function(result) {
@@ -86,6 +96,7 @@ function ArticlesPage() {
 }
 
 function ReadingPage(viewRoot) {
+  this.articles = {};
   this.loadArticle = function(sourceIndex, topicIndex, articleIndex) {
     return new Promise(function(fulfill) {
       $.get(wsUrl + "/news-scraper/" + sourceIndex + "/" + topicIndex + "/" + articleIndex, fulfill);

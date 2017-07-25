@@ -68,8 +68,8 @@
 
 <div data-class="TopicsPage" class="topics-page"
   bind-var-view-root="thisElem"
-  bind-var-source="null"
-  bind-statement-1="#source=null; if (#sourceIndex!=null) this.loadSource(#sourceIndex).then(function(result) {#source=result})"
+  bind-var-source="#sources[#sourceIndex]"
+  bind-statement-1="if (#sourceIndex!=null && !#source) this.loadSource(#sourceIndex).then(function(result) {#source=result})"
   bind-statement-2="if (#active && #voiceEngine) this.speak(#voiceEngine, #source.topics)"
   bind-statement-3="$(thisElem).toggle(#active)">
   <div bind-view="Header"
@@ -87,8 +87,8 @@
 
 <div data-class="ArticlesPage" class="articles-page"
   bind-var-view-root="thisElem"
-  bind-var-topic="null"
-  bind-statement-1="#topic=null; if (#sourceIndex!=null && #topicIndex!=null) this.loadTopic(#sourceIndex, #topicIndex).then(function(result) {#topic=result})"
+  bind-var-topic="#topics[#sourceIndex+'-'+#topicIndex]"
+  bind-statement-1="if (#sourceIndex!=null && #topicIndex!=null && !#topic) this.loadTopic(#sourceIndex, #topicIndex).then(function(result) {#topic=result})"
   bind-statement-2="if (#active && #voiceEngine) this.speak(#voiceEngine, #topic)"
   bind-statement-3="$(thisElem).toggle(#active)">
   <div bind-view="Header"
@@ -106,9 +106,9 @@
 
 <div data-class="ReadingPage" class="reading-page"
   bind-var-view-root="thisElem"
-  bind-var-article="null"
+  bind-var-article="#articles[#sourceIndex+'-'+#topicIndex+'-'+#articleIndex]"
   bind-param-is-paused="false"
-  bind-statement-1="#article=null; if (#sourceIndex!=null && #topicIndex!=null && #articleIndex!=null) this.loadArticle(#sourceIndex, #topicIndex, #articleIndex).then(function(result) {#article=result})"
+  bind-statement-1="if (#sourceIndex!=null && #topicIndex!=null && #articleIndex!=null && !#article) this.loadArticle(#sourceIndex, #topicIndex, #articleIndex).then(function(result) {#article=result})"
   bind-statement-2="if (#active && #voiceEngine) this.speak(#voiceEngine, #article)"
   bind-statement-3="$(thisElem).toggle(#active)">
   <div bind-view="Header"

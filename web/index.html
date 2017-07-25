@@ -18,25 +18,13 @@
   <meta name="application-name" content="Read Aloud News">
   <meta name="theme-color" content="#ffffff">
 
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/bootstrap.min.css">
   <link rel="stylesheet" href="css/components.css">
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-  <script src="https://cdn.rawgit.com/ken107/databind-js/master/databind.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/es6-promise/4.1.0/es6-promise.auto.min.js"></script>
+  <script src="js/pack.js"></script>
   <script src="https://ken107.github.io/read-aloud/js/readaloud.min.js"></script>
-  <script src="js/components.js"></script>
 
   <script>
-    $("<div/>").load("components.html", function() {
-      $(this).children("[data-class]").each(function() {
-        var className = $(this).data("class");
-        if (!window[className]) throw new Error("Missing class " + className);
-        dataBinder.views[className] = {template: this, controller: window[className]};
-      })
-    });
-
     function mobileHack() {
       readAloud.speak([" "], {lang: state.lang});
     }
@@ -74,27 +62,30 @@
     bind-param-voice-engine="#voiceEngine"
     bind-param-active="#state.page == 'sources'"
     bind-param-lang="#state.lang"
-    bind-event-select-source="mobileHack(); state.page='topics'; state.source=event.data; state.topic=null; state.article=null"></div>
+    bind-event-select-source="mobileHack(); state.page='topics'; state.sourceIndex=event.data; state.topicIndex=null; state.articleIndex=null"></div>
+
   <div bind-view="TopicsPage"
     bind-param-voice-engine="#voiceEngine"
-    bind-param-source-index="#state.source"
+    bind-param-source-index="#state.sourceIndex"
     bind-param-active="#state.page == 'topics'"
-    bind-event-select-topic="state.page='articles'; state.topic=event.data; state.article=null"
+    bind-event-select-topic="state.page='articles'; state.topicIndex=event.data; state.articleIndex=null"
     bind-event-go-back="state.page='sources'"></div>
+
   <div bind-view="ArticlesPage"
     bind-param-voice-engine="#voiceEngine"
-    bind-param-source-index="#state.source"
-    bind-param-topic-index="#state.topic"
+    bind-param-source-index="#state.sourceIndex"
+    bind-param-topic-index="#state.topicIndex"
     bind-param-active="#state.page == 'articles'"
-    bind-event-select-article="state.page='reading'; state.article=event.data"
+    bind-event-select-article="state.page='reading'; state.articleIndex=event.data"
     bind-event-go-back="state.page='topics'"></div>
+
   <div bind-view="ReadingPage"
     bind-param-voice-engine="#voiceEngine"
-    bind-param-source-index="#state.source"
-    bind-param-topic-index="#state.topic"
-    bind-param-article-index="#state.article"
+    bind-param-source-index="#state.sourceIndex"
+    bind-param-topic-index="#state.topicIndex"
+    bind-param-article-index="#state.articleIndex"
     bind-param-active="#state.page == 'reading'"
-    bind-event-next-article="state.page='reading'; state.article=Number(#state.article)+1"
+    bind-event-next-article="state.articleIndex=Number(#state.article)+1"
     bind-event-go-back="state.page='articles'"></div>
 </body>
 </html>
