@@ -16,7 +16,9 @@
     </button>
   </td>
   <td class="col-2">
-    <span bind-event-click="window.open('https://www.lsdsoftware.com/', '_blank')">{{location.hostname.split(".").slice(-2).join(".")}}</span>
+    <span bind-statement-1="$(thisElem).toggle(!#title)"
+      bind-event-click="window.open('https://www.lsdsoftware.com/', '_blank')">{{location.hostname.split(".").slice(-2).join(".")}}</span>
+    <span bind-statement-1="$(thisElem).toggle(!!#title)">{{#title}}</span>
   </td>
   <td class="col-3">
     <button type="button" class="btn btn-primary"
@@ -66,29 +68,31 @@
 
 <div data-class="TopicsPage" class="topics-page"
   bind-var-view-root="thisElem"
-  bind-var-topics="null"
-  bind-statement-1="if (#sourceIndex==null) #topics=null; else this.loadSource(#sourceIndex).then(function(topics) {#topics=topics})"
-  bind-statement-2="if (#active && #voiceEngine) this.speak(#voiceEngine, #topics)"
+  bind-var-source="null"
+  bind-statement-1="#source=null; if (#sourceIndex!=null) this.loadSource(#sourceIndex).then(function(result) {#source=result})"
+  bind-statement-2="if (#active && #voiceEngine) this.speak(#voiceEngine, #source.topics)"
   bind-statement-3="$(thisElem).toggle(#active)">
   <div bind-view="Header"
+    bind-param-title="#source.name"
     bind-param-is-playing="!!#voiceEngine.speech.isActive"
     bind-event-button1="$(#viewRoot).triggerHandler('go-back')"
     bind-event-button2="if (#voiceEngine.speech.isActive) #voiceEngine.pause(); else #voiceEngine.resume()"></div>
   <div bind-view="ItemList"
-    bind-param-items="#topics"
+    bind-param-items="#source.topics"
     bind-event-select="$(#viewRoot).triggerHandler('select-topic', event.data)"></div>
   <div bind-view="Footer"></div>
   <div bind-view="ProgressInd"
-    bind-statement-1="$(thisElem).toggle(#topics==null)"></div>
+    bind-statement-1="$(thisElem).toggle(#source==null)"></div>
 </div>
 
 <div data-class="ArticlesPage" class="articles-page"
   bind-var-view-root="thisElem"
   bind-var-topic="null"
-  bind-statement-1="if (#sourceIndex==null || #topicIndex==null) #topic=null; else this.loadTopic(#sourceIndex, #topicIndex).then(function(topic) {#topic=topic})"
+  bind-statement-1="#topic=null; if (#sourceIndex!=null && #topicIndex!=null) this.loadTopic(#sourceIndex, #topicIndex).then(function(result) {#topic=result})"
   bind-statement-2="if (#active && #voiceEngine) this.speak(#voiceEngine, #topic)"
   bind-statement-3="$(thisElem).toggle(#active)">
   <div bind-view="Header"
+    bind-param-title="#topic.name"
     bind-param-is-playing="!!#voiceEngine.speech.isActive"
     bind-event-button1="$(#viewRoot).triggerHandler('go-back')"
     bind-event-button2="if (#voiceEngine.speech.isActive) #voiceEngine.pause(); else #voiceEngine.resume()"></div>
@@ -104,7 +108,7 @@
   bind-var-view-root="thisElem"
   bind-var-article="null"
   bind-param-is-paused="false"
-  bind-statement-1="if (#sourceIndex==null || #topicIndex==null || #articleIndex==null) #article=null; else this.loadArticle(#sourceIndex, #topicIndex, #articleIndex).then(function(article) {#article=article})"
+  bind-statement-1="#article=null; if (#sourceIndex!=null && #topicIndex!=null && #articleIndex!=null) this.loadArticle(#sourceIndex, #topicIndex, #articleIndex).then(function(result) {#article=result})"
   bind-statement-2="if (#active && #voiceEngine) this.speak(#voiceEngine, #article)"
   bind-statement-3="$(thisElem).toggle(#active)">
   <div bind-view="Header"

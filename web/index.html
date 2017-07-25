@@ -74,12 +74,12 @@
     bind-param-voice-engine="#voiceEngine"
     bind-param-active="#state.page == 'sources'"
     bind-param-lang="#state.lang"
-    bind-event-select-source="mobileHack(); state.page='topics'; state.source=event.data"></div>
+    bind-event-select-source="mobileHack(); state.page='topics'; state.source=event.data; state.topic=null; state.article=null"></div>
   <div bind-view="TopicsPage"
     bind-param-voice-engine="#voiceEngine"
     bind-param-source-index="#state.source"
     bind-param-active="#state.page == 'topics'"
-    bind-event-select-topic="state.page='articles'; state.topic=event.data"
+    bind-event-select-topic="state.page='articles'; state.topic=event.data; state.article=null"
     bind-event-go-back="state.page='sources'"></div>
   <div bind-view="ArticlesPage"
     bind-param-voice-engine="#voiceEngine"

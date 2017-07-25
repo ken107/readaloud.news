@@ -15,6 +15,7 @@ function ProgressInd() {
 }
 
 function Header() {
+  this.title = null;
 }
 
 function Footer() {
@@ -45,7 +46,10 @@ function TopicsPage() {
   this.loadSource = function(sourceIndex) {
     return new Promise(function(fulfill) {
       $.get(wsUrl + "/news-scraper/" + sourceIndex, function(result) {
-        fulfill(result.topics.map(function(topic) {return topic.name}))
+        fulfill({
+          name: result.name,
+          topics: result.topics.map(function(topic) {return topic.name})
+        })
       });
     })
   }
