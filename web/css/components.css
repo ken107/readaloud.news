@@ -1,4 +1,13 @@
 
+body {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
+}
+
 .progress-ind {
   position: fixed;
   top: 0;
@@ -24,8 +33,7 @@
   background: #fbe1b0;
   border-radius: 10px 0 0 10px;
   padding: 0;
-}
-.item:active {
+  cursor: pointer;
 }
 .item .number {
   width: 50px;

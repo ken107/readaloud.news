@@ -38,11 +38,11 @@
   bind-var-view-root="thisElem">
   <div class="item"
     bind-repeater-i="#items.length"
-    bind-event-click="$(#viewRoot).triggerHandler('select', #i)">
+    bind-event-click="$(#viewRoot).triggerHandler('select', #items[#i].value)">
     <table>
       <tr>
         <td class="number">{{#i+1}}</td>
-        <td class="text">{{#items[#i]}}</td>
+        <td class="text">{{#items[#i].text}}</td>
       </tr>
     </table>
   </div>
@@ -116,7 +116,7 @@
     bind-event-button1="$(#viewRoot).triggerHandler('go-back')"
     bind-event-button2="if (#voiceEngine.speech.isActive) #voiceEngine.pause(); else #voiceEngine.resume()"></div>
   <div bind-view="ItemList"
-    bind-param-items="['Next article', 'View original article']"
+    bind-param-items="[{value:'next-article', text:'Next article'}, {value:'view-original', text:'View original article'}]"
     bind-event-select="this.onSelect(event.data, #article)"></div>
   <div class="article" bind-statement-1="$(thisElem).toggle(!!#article)">
     <div class="title">{{#article.title}}</div>

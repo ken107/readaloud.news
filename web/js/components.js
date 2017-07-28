@@ -37,13 +37,18 @@ function  SourcesPage() {
     var lang = this.lang;
     return new Promise(function(fulfill) {
       $.get(wsUrl + "/news-scraper", function(result) {
-        fulfill(result.filter(function(source) {return source.lang == lang}).map(function(source) {return source.name}))
+        fulfill(result.map(function(source, index) {
+          return {value: index, text: source.name, visible: source.lang == lang};
+        })
+        .filter(function(item) {
+          return item.visible;
+        }));
       });
     })
   }
   this.speak = function(voiceEngine, sources) {
     if (sources) {
-      var speech = sources.map(addNumbering).map(addPeriod).join("\n");
+      var speech = sources.map(function(s) {return s.text}).map(addNumbering).map(addPeriod).join("\n");
       console.log(speech);
       //voiceEngine.speak(speech)
     }
@@ -57,14 +62,16 @@ function TopicsPage() {
       $.get(wsUrl + "/news-scraper/" + sourceIndex, function(result) {
         fulfill({
           name: result.name,
-          topics: result.topics.map(function(topic) {return topic.name})
+          topics: result.topics.map(function(topic, index) {
+            return {value: index, text: topic.name};
+          })
         })
       });
     })
   }
   this.speak = function(voiceEngine, topics) {
     if (topics) {
-      var speech = topics.map(addNumbering).map(addPeriod).join("\n");
+      var speech = topics.map(function(t) {return t.text}).map(addNumbering).map(addPeriod).join("\n");
       console.log(speech);
       //voiceEngine.speak(speech)
     }
@@ -78,9 +85,11 @@ function ArticlesPage() {
       $.get(wsUrl + "/news-scraper/" + sourceIndex + "/" + topicIndex, function(result) {
         fulfill({
           name: result.name,
-          articles: result.articles.map(function(article) {
-            if (article.source) return article.source + " - " + article.title;
-            else return article.title;
+          articles: result.articles.map(function(article, index) {
+            return {
+              value: index,
+              text: article.source ? (article.source + " - " + article.title) : article.title
+            };
           })
         })
       });
@@ -88,7 +97,7 @@ function ArticlesPage() {
   }
   this.speak = function(voiceEngine, topic) {
     if (topic) {
-      var speech = [topic.name + '.'].concat(topic.articles.map(addNumbering).map(addPeriod));
+      var speech = [topic.name + '.'].concat(topic.articles.map(function(a) {return a.text}).map(addNumbering).map(addPeriod));
       console.log(speech);
       voiceEngine.speak(speech)
     }
@@ -109,12 +118,12 @@ function ReadingPage(viewRoot) {
       voiceEngine.speak(speech)
     }
   }
-  this.onSelect = function(index, article) {
-    switch (index) {
-      case 0:
+  this.onSelect = function(cmd, article) {
+    switch (cmd) {
+      case 'next-article':
         $(viewRoot).triggerHandler('next-article');
         break;
-      case 1:
+      case 'view-original':
         window.open(article.link, "_blank");
         break;
     }
