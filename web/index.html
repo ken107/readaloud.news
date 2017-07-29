@@ -33,7 +33,7 @@
   <script>
     state = {
       page: 'sources',
-      lang: /tin10h\.com$/.test(location.hostname) ? "vi" : "en"
+      lang: /tin10h\.com$/.test(location.hostname) || /\.datviet\.com$/.test(location.hostname) ? "vi" : "en"
     };
     voiceEngine = {
       speak: function(texts) {
