@@ -1,5 +1,5 @@
 
-var wsUrl = "https://support.lsdsoftware.com:30112";
+var wsUrl = "https://support.lsdsoftware.com";
 
 $("<div/>").load("components.html", function() {
   $(this).children("[data-class]").each(function() {
