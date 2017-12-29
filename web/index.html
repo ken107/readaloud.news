@@ -21,19 +21,28 @@
   <link rel="stylesheet" href="css/bootstrap.min.css">
   <link rel="stylesheet" href="css/components.css">
 
-  <script src="js/pack.js"></script>
+  <script src="js/pack.min.js"></script>
   <script src="https://ken107.github.io/read-aloud/js/readaloud.min.js"></script>
 
   <script>
     function mobileHack() {
-      readAloud.speak([" "], {lang: state.lang});
+      var audio = window.ttsAudio || (window.ttsAudio = document.createElement("AUDIO"));
+      audio.src = "sound/silence.mp3";
+      audio.play();
     }
   </script>
 
   <script>
+    queryString = {};
+    if (location.search)
+      location.search.substr(1).split('&').forEach(function(token) {
+        var pair = token.split('=');
+        queryString[decodeURIComponent(pair[0])] = pair.length > 1 ? decodeURIComponent(pair[1]) : true;
+      })
+
     state = {
       page: 'sources',
-      lang: /tin10h\.com$/.test(location.hostname) || /\.datviet\.com$/.test(location.hostname) ? "vi" : "en"
+      lang: queryString.lang || (/tin10h\.com$/.test(location.hostname) || /\.datviet\.com$/.test(location.hostname) ? "vi" : "en")
     };
     voiceEngine = {
       speak: function(texts) {
