@@ -46,12 +46,8 @@ function  SourcesPage() {
       });
     })
   }
-  this.speak = function(voiceEngine, sources) {
-    if (sources) {
-      var speech = sources.map(function(s) {return s.text}).map(addNumbering).map(addPeriod).join("\n");
-      console.log(speech);
-      //voiceEngine.speak(speech)
-    }
+  this.getSpeech = function(sources) {
+    return sources && sources.map(function(s) {return s.text}).map(addNumbering).map(addPeriod);
   }
 }
 
@@ -69,12 +65,8 @@ function TopicsPage() {
       });
     })
   }
-  this.speak = function(voiceEngine, topics) {
-    if (topics) {
-      var speech = topics.map(function(t) {return t.text}).map(addNumbering).map(addPeriod).join("\n");
-      console.log(speech);
-      //voiceEngine.speak(speech)
-    }
+  this.getSpeech = function(topics) {
+    return topics && topics.map(function(t) {return t.text}).map(addNumbering).map(addPeriod);
   }
 }
 
@@ -95,12 +87,8 @@ function ArticlesPage() {
       });
     })
   }
-  this.speak = function(voiceEngine, topic) {
-    if (topic) {
-      var speech = [topic.name + '.'].concat(topic.articles.map(function(a) {return a.text}).map(addNumbering).map(addPeriod));
-      console.log(speech);
-      voiceEngine.speak(speech)
-    }
+  this.getSpeech = function(topic) {
+    return topic && [topic.name + '.'].concat(topic.articles.map(function(a) {return a.text}).map(addNumbering).map(addPeriod));
   }
 }
 
@@ -111,12 +99,8 @@ function ReadingPage(viewRoot) {
       $.get(wsUrl + "/news-scraper/" + sourceIndex + "/" + topicIndex + "/" + articleIndex, fulfill);
     })
   }
-  this.speak = function(voiceEngine, article) {
-    if (article) {
-      var speech = [article.title].concat(article.texts);
-      console.log(speech);
-      voiceEngine.speak(speech)
-    }
+  this.getSpeech = function(article) {
+    return article && [article.title].concat(article.texts);
   }
   this.onSelect = function(cmd, article) {
     switch (cmd) {

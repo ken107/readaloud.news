@@ -52,12 +52,12 @@
   bind-var-view-root="thisElem"
   bind-var-sources="null"
   bind-statement-1="#sources=null; this.loadSources().then(function(sources) {#sources=sources})"
-  bind-statement-2="if (#active && #voiceEngine) this.speak(#voiceEngine, #sources)"
+  bind-statement-2="if (#active) #voiceEngine.setSpeech(this.getSpeech(#sources))"
   bind-statement-3="$(thisElem).toggle(#active)">
   <div bind-view="Header"
-    bind-param-is-playing="!!#voiceEngine.speech.isActive"
+    bind-param-is-playing="#voiceEngine.state == 'PLAYING'"
     bind-event-button1="$(#viewRoot).triggerHandler('go-back')"
-    bind-event-button2="if (#voiceEngine.speech.isActive) #voiceEngine.pause(); else #voiceEngine.resume()"></div>
+    bind-event-button2="#voiceEngine.toggle(true)"></div>
   <div bind-view="ItemList"
     bind-param-items="#sources"
     bind-event-select="$(#viewRoot).triggerHandler('select-source', event.data)"></div>
@@ -70,13 +70,13 @@
   bind-var-view-root="thisElem"
   bind-var-source="#sources[#sourceIndex]"
   bind-statement-1="if (#sourceIndex!=null && !#source) this.loadSource(#sourceIndex).then(function(result) {#source=result})"
-  bind-statement-2="if (#active && #voiceEngine) this.speak(#voiceEngine, #source.topics)"
+  bind-statement-2="if (#active) #voiceEngine.setSpeech(this.getSpeech(#source.topics))"
   bind-statement-3="$(thisElem).toggle(#active)">
   <div bind-view="Header"
     bind-param-title="#source.name"
-    bind-param-is-playing="!!#voiceEngine.speech.isActive"
+    bind-param-is-playing="#voiceEngine.state == 'PLAYING'"
     bind-event-button1="$(#viewRoot).triggerHandler('go-back')"
-    bind-event-button2="if (#voiceEngine.speech.isActive) #voiceEngine.pause(); else #voiceEngine.resume()"></div>
+    bind-event-button2="#voiceEngine.toggle(true)"></div>
   <div bind-view="ItemList"
     bind-param-items="#source.topics"
     bind-event-select="$(#viewRoot).triggerHandler('select-topic', event.data)"></div>
@@ -89,13 +89,13 @@
   bind-var-view-root="thisElem"
   bind-var-topic="#topics[#sourceIndex+'-'+#topicIndex]"
   bind-statement-1="if (#sourceIndex!=null && #topicIndex!=null && !#topic) this.loadTopic(#sourceIndex, #topicIndex).then(function(result) {#topic=result})"
-  bind-statement-2="if (#active && #voiceEngine) this.speak(#voiceEngine, #topic)"
+  bind-statement-2="if (#active) #voiceEngine.setSpeech(this.getSpeech(#topic), true)"
   bind-statement-3="$(thisElem).toggle(#active)">
   <div bind-view="Header"
     bind-param-title="#topic.name"
-    bind-param-is-playing="!!#voiceEngine.speech.isActive"
+    bind-param-is-playing="#voiceEngine.state == 'PLAYING'"
     bind-event-button1="$(#viewRoot).triggerHandler('go-back')"
-    bind-event-button2="if (#voiceEngine.speech.isActive) #voiceEngine.pause(); else #voiceEngine.resume()"></div>
+    bind-event-button2="#voiceEngine.toggle(true)"></div>
   <div bind-view="ItemList"
     bind-param-items="#topic.articles"
     bind-event-select="$(#viewRoot).triggerHandler('select-article', event.data)"></div>
@@ -109,12 +109,12 @@
   bind-var-article="#articles[#sourceIndex+'-'+#topicIndex+'-'+#articleIndex]"
   bind-param-is-paused="false"
   bind-statement-1="if (#sourceIndex!=null && #topicIndex!=null && #articleIndex!=null && !#article) this.loadArticle(#sourceIndex, #topicIndex, #articleIndex).then(function(result) {#article=result})"
-  bind-statement-2="if (#active && #voiceEngine) this.speak(#voiceEngine, #article)"
+  bind-statement-2="if (#active) #voiceEngine.setSpeech(this.getSpeech(#article), true)"
   bind-statement-3="$(thisElem).toggle(#active)">
   <div bind-view="Header"
-    bind-param-is-playing="!!#voiceEngine.speech.isActive"
+    bind-param-is-playing="#voiceEngine.state == 'PLAYING'"
     bind-event-button1="$(#viewRoot).triggerHandler('go-back')"
-    bind-event-button2="if (#voiceEngine.speech.isActive) #voiceEngine.pause(); else #voiceEngine.resume()"></div>
+    bind-event-button2="#voiceEngine.toggle(true)"></div>
   <div bind-view="ItemList"
     bind-param-items="[{value:'next-article', text:'Next article'}, {value:'view-original', text:'View original article'}]"
     bind-event-select="this.onSelect(event.data, #article)"></div>
