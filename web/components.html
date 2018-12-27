@@ -24,8 +24,8 @@
     <button type="button" class="btn btn-primary"
       bind-event-click="$(#viewRoot).triggerHandler('button2')">
       <span class="glyphicon"
-        bind-statement-1="$(thisElem).toggleClass('glyphicon-pause', #isPlaying).toggleClass('glyphicon-play', !#isPlaying)"></span>
-      <span bind-statement-1="$(thisElem).text(#isPlaying ? 'Pause' : 'Play')"></span>
+        bind-statement-1="$(thisElem).toggleClass('glyphicon-pause', #isPlaying).toggleClass('glyphicon-volume-up', !#isPlaying)"></span>
+      <span bind-statement-1="$(thisElem).text(#isPlaying ? 'Pause' : 'Listen')"></span>
     </button>
   </td>
   </tr>
