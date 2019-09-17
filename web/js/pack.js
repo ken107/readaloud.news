@@ -14574,7 +14574,7 @@ if (typeof jQuery === 'undefined') {
 	}
 })();
 
-var wsUrl = "https://support.lsdsoftware.com:30299/news-scraper";
+var wsUrl = "https://service.lsdsoftware.com/news-scraper";
 
 $("<div/>").load("components.html", function() {
   $(this).children("[data-class]").each(function() {
